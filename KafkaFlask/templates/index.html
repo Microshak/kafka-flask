@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<link href="../static/content/command.css" rel="stylesheet" />
+
+
+<div class="readings"> 
+<span style="float:left;">Temperature: </span><div  id="Temperature" style="float:left;"></div>
+</div><div class="readings"> 
+<span style="float:left;">Sensor1: </span><div  id="Sensor1" style="float:left;"></div>
+</div><div class="readings"> 
+
+<span style="float:left;">Sensor2: </span><div  id="Sensor2" style="float:left;"></div>
+</div><div class="readings"> 
+
+<span style="float:left;">Humidity: </span><div  id="Humidity" style="float:left;"></div>
+</div>  
+
+{% endblock %}
+ {% block scripts %}
+ <script type="text/javascript">
+    
+    
+  
+
+ $(function(){
+    doPoll()    
+});
+
+function doPoll()
+{
+
+$.ajax({url: "/poll/test", success: function(result){
+        console.log(result)
+//        var x = (JSON.parse(result[0])) 
+t = 1
+        result.forEach(function(element) {
+          console.log(element)
+            
+            setTimeout(function() {
+                $("#Temperature").html(JSON.parse(element["Temperature"]));
+                $("#Sensor1").html(JSON.parse(element["Sensor1"]));
+                $("#Sensor2").html(JSON.parse(element["Sensor2"]));
+                $("#Humidity").html(JSON.parse(element["Humidity"]));
+                }, 200 * t++)
+        });
+        //$("#div1").html(JSON.parse(result[0]["Temperature"]));
+        setTimeout(doPoll,1000);
+
+    }});
+}
+
+    </script>
+
+ <script src="../static/scripts/mustach.js"></script>
+{% endblock %}
+
+
+
